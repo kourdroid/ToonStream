@@ -1,13 +1,13 @@
 {
     "builds":[{
-        "src":"toon_stream/wsgi.py",
+        "src":"toon_stream/asgi.py",
         "use":"@vercel/python",
         "config":{"maxLambdaSize":"15mb","runtime":"python3.9"}
     }],
     "routes":[
         {
             "src":"/(.*)",
-            "dest":"toon_stream/wsgi.py"
+            "dest":"toon_stream/asgi.py"
         }
     ]
 }
