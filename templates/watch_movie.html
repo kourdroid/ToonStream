@@ -1,0 +1,58 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="icon" type="image/x-icon" href="/static/img/icon.ico">
+    <title>{{movie.title}}</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" type="text/css" href="{% static 'assets/style.css' %}" />
+    <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100..900;1,100..900&family=Open+Sans:ital,wght@0,300..800;1,300..800&family=Roboto:ital,wght@0,100;0,300;0,400;0,500;0,700;0,900;1,100;1,300;1,400;1,500;1,700;1,900&display=swap"
+        rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/plyr@3.7.3/dist/plyr.min.js"></script>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/plyr@3.7.3/dist/plyr.css">
+    
+</head>
+
+<body class="px-20 text-white flex flex-col h-[120vh] font-[Montserrat] overflow-x-hidden">
+
+    <div class="absolute z-[-1] inset-0 h-[120vh] bg-gradient-to-r from-[#000] to-[#0000]"></div>
+    {% if movie.image_cover %}
+    <img class="absolute z-[-2] h-[120vh] w-full inset-0 object-cover " src='{{movie.image_cover.url}}' alt="">
+    {% else %}
+    <p>No image available</p>
+    {% endif %}
+
+    <!-- Navbar -->
+    <header class="py-10 ">
+
+        <a href="/shows/{{movie.title}}" class="flex gap-4 items-center group "><i
+                class='bx bx-arrow-back group-hover:-translate-x-3 transition-all duration-200 ease-in-out'></i>
+            <span>Return
+                to {{movie.type}} Page</span></a>
+    </header>
+    <section>
+        <h1 class="text-2xl font-bold text-center pb-8">{{movie.title}}</h1>
+        <div class="">
+
+            <video id="my-video" class=" w-full h-auto rounded-lg" controls src="{{movie.video.url}}">
+                <source >
+            </video>
+            <script>
+                const player = new Plyr('#my-video');
+            </script>
+        </div>
+    </section>
+
+    <script></script>
+
+
+</body>
+
+</html>

@@ -1,0 +1,111 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="icon" type="image/x-icon" href="/static/img/icon.ico">
+    <title>{{movie.title}}</title>
+<script src="https://cdn.tailwindcss.com"></script>
+<link rel="stylesheet" type="text/css" href="{% static 'assets/style.css' %}" />
+<link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link
+    href="https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100..900;1,100..900&family=Open+Sans:ital,wght@0,300..800;1,300..800&family=Roboto:ital,wght@0,100;0,300;0,400;0,500;0,700;0,900;1,100;1,300;1,400;1,500;1,700;1,900&display=swap"
+    rel="stylesheet">
+</head>
+
+<body class="px-20 text-white flex flex-col h-[120vh] xl:h-full min-h-screen font-[Montserrat] overflow-x-hidden">
+    
+    <div class="absolute z-[-1] inset-0 h-[120vh] xl:h-full min-h-screen bg-gradient-to-r from-[#000] to-[#0000]"></div>
+    {% if movie.image_cover %}
+    <img class="absolute z-[-2] h-[120vh] xl:h-full min-h-screen w-full inset-0 object-cover " src='{{movie.image_cover.url}}' alt="">
+    {% else %}
+    <p>No image available</p>
+    {% endif %}
+    <!-- Navbar -->
+    <header class="py-10 ">
+    
+        <a href="/" class="flex gap-4 items-center group "><i
+                class='bx bx-arrow-back group-hover:-translate-x-3 transition-all duration-200 ease-in-out'></i>
+            <span>Return
+                to Home Page</span></a>
+    </header>
+
+    <!-- content section -->
+    <section class="flex-col justify-center items-start gap-10 h-full">
+        <div class="flex flex-col gap-20 xl:flex-row xl:gap:0 xl:justify-between items-center h-full">
+            <section class="flex justify-start items-start gap-8 w-full">
+                <div class="h-[27rem] ">
+                    <img class="h-full rounded-lg object-cover" src="{{movie.image_card.url}}" alt="">
+                </div>
+                <div class="flex flex-col gap-5">
+                    <div class="flex gap-3">
+                        <div class="font-semibold bg-purple-600 w-max px-3 py-1 rounded capitalize">{{movie.type}}</div>
+                        <div class="font-semibold bg-purple-600 w-max px-3 py-1 rounded "> {{ movie.length }}
+                            {% if movie.type == 'movie' %}
+                            Hours
+                            {% elif movie.type == 'serie' %}
+                            Seasons
+                            {% elif movie.type == 'special' %}
+                            Episodes
+                            {% endif %} </div>
+                        <div class="font-semibold bg-purple-600 w-max px-3 py-1 rounded capitalize">
+                            {{movie.release_date|date:"Y"}}</div>
+                    </div>
+        
+                    <h2 class="text-6xl font-extrabold max-w-[30rem]">{{movie.title}}</h2>
+                    <h3 class="text-sm text-gray-200">{{movie.production_company}}</h3>
+                    <p class="max-w-[30rem]">{{movie.description}}</p>
+                    
+                    <a href="{% url 'watch' content_type=movie.type movie_title=movie.title %}">
+                        <button class="uppercase rounded-full font-bold bg-purple-600 hover:bg-purple-500 transition-colors duration-150 ease-in-out w-max px-5 py-3 flex items-center gap-3">
+                            <i class='bx bx-play text-3xl'></i>Watch Now</button>
+                    </a>
+                    <div class="flex items-center gap-2">
+                        <i class='bx bx-show'></i>
+                        <span>{{movie.movie_views}}</span>
+                    </div>
+
+                </div>
+        
+            </section>
+        
+            <section class="w-full flex justify-center items-center mx-auto rounded-lg">
+                <div class="flex justify-center w-full rounded-lg">
+                    <iframe src='{{movie.trailer_link}}' title="YouTube video player" frameBorder="0" " allowFullScreen
+                                class=" w-3/4 mx-auto h-full aspect-video rounded-lg"></iframe>
+                </div>
+            </section>
+        </div>
+        <div class="h-full">
+            {% if movie.is_series %}
+            <h2 class="py-8 text-xl font-bold">Seasons</h2>
+            <ul class="seasons-list flex space-x-5">
+                {% for season in movie.season_set.all %}
+                <li class="season-item relative w-40 h-64 rounded-lg  film-card">
+                    <a href="{% url 'serie_watch_page' movie.title season.pk %}">
+                        <img src="{{ season.poster.url }}" class="rounded-lg w-full h-full absolute inset-0 object-cover"
+                            alt="Season {{ season.season_number }} Poster">
+                        <div
+                            class="absolute z-[1] text-sm top-2 right-2 px-2 py-1 bg-purple-700 bg-opacity-70 border shadow-lg border-[#ffffff3f] backdrop-blur-md rounded-md">
+                            S {{ season.season_number }}</div>
+                    </a>
+                </li>
+                {% endfor %}
+            </ul>
+            {% elif movie.is_special %}
+            <a href="{% url 'watch_special.html' %}">
+                <button class="py-2 px-4 rounded-lg bg-purple-600 hover:bg-purple-500 text-white">Watch Special</button>
+            </a>
+            {% endif %}
+        </div>
+    </section>
+
+
+
+</body>
+
+</html>

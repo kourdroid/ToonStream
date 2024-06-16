@@ -1,0 +1,90 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="icon" type="image/x-icon" href="/static/img/icon.ico">
+    <title>{{movie.title}}</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" type="text/css" href="{% static 'assets/style.css' %}" />
+    <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100..900;1,100..900&family=Open+Sans:ital,wght@0,300..800;1,300..800&family=Roboto:ital,wght@0,100;0,300;0,400;0,500;0,700;0,900;1,100;1,300;1,400;1,500;1,700;1,900&display=swap"
+        rel="stylesheet">
+    <link href="https://vjs.zencdn.net/7.17.0/video-js.css" rel="stylesheet">
+    <script src="https://vjs.zencdn.net/7.17.0/video.js"></script>
+
+</head>
+
+<body class="px-20 text-white flex flex-col h-[100vh] font-[Montserrat] overflow-x-hidden">
+
+    <div class="absolute z-[-1] inset-0 h-[100vh] bg-gradient-to-r from-[#000] to-[#0000]"></div>
+    {% if movie.image_cover %}
+    <img class="absolute z-[-2] h-[100vh] w-full inset-0 object-cover " src='{{movie.image_cover.url}}' alt="">
+    {% else %}
+    <p>No image available</p>
+    {% endif %}
+
+    <!-- Navbar -->
+    <header class="py-10 ">
+
+        <a href="/shows/{{movie.title}}" class="flex gap-4 items-center group "><i
+                class='bx bx-arrow-back group-hover:-translate-x-3 transition-all duration-200 ease-in-out'></i>
+            <span>Return
+                to {{movie.type}} Page</span></a>
+    </header>
+    <section class="h-full">
+        <h1 class="text-2xl font-bold text-center pb-8">{{movie.title}} S{{season.season_number}}</h1>
+        <div class="flex items-center">
+            <div class="w-full rounded-lg">
+                <video controls preload="auto" class="rounded-lg shadow-lg">
+                    <source src="{{episodes.0.episode.url}}" type="video/mp4">
+                </video>
+
+
+            </div>
+            <div class="w-2/3 min-h-96">
+                <div id="episode-list" class="episode-item w-96 mx-auto bg-gray-950 bg-opacity-80 backdrop-blur-lg rounded-lg min-h-96">
+                    <h2 class="text-center py-5 font-semibold">Episodes</h2>
+                    <div class="h-0.5 w-full bg-white bg-opacity-20"></div>
+                    {% for episode in episodes %}
+                    <a href="" id="episode-{{ episode.id }}" class="py-5 flex items-center justify-center text-center ">
+                        <h2 class="font-light text-sm">Episode {{episode.episode_number}}</h2>
+                    </a>
+                    <div class="h-0.5 w-2/3 mx-auto bg-white bg-opacity-20"></div>
+                    {% endfor %}
+                </div>
+
+            </div>
+        </div>
+    </section>
+
+    <script>
+        const episodeList = document.getElementById('episode-list');
+
+        episodeList.addEventListener('click', function (event) {
+                const clickedElementId = event.target.id;
+                const episodeId = clickedElementId.substring(clickedElementId.indexOf('-') + 1);
+                console.log(clickedElementId)
+                console.log(episodeId)
+
+                // Retrieve video URL based on episode ID (logic in views.py)
+                const episodeVideoUrl = getEpisodeVideoUrl(episodeId); // Replace with actual function call
+                updateVideoSource(episodeVideoUrl);
+                console.log(episodeVideoUrl)
+            });
+        function updateVideoSource(videoUrl) {
+                    const videoElement = document.querySelector('video');  // Assuming a single video element
+                    videoElement.src = videoUrl;
+                    videoElement.load();  // Reload the video to ensure proper playback
+        }
+    </script>
+
+
+</body>
+
+</html>

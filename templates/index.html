@@ -1,0 +1,131 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="icon" type="image/x-icon" href="/static/img/icon.ico">
+    <title>ToonStream</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" type="text/css" href="{% static 'assets/style.css' %}" />
+    <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link
+    href="https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100..900;1,100..900&family=Open+Sans:ital,wght@0,300..800;1,300..800&family=Roboto:ital,wght@0,100;0,300;0,400;0,500;0,700;0,900;1,100;1,300;1,400;1,500;1,700;1,900&display=swap"
+    rel="stylesheet">
+</head>
+
+<body class=" text-white  max-h-screen  font-[Montserrat]" >
+    <!-- background section -->
+    <div class="absolute z-[-1] inset-0 bg-gradient-to-t from-[#000] to-[#0000]"></div>
+    <div class="absolute z-[-2]  w-full h-1/4 bg-gradient-to-b from-[#00000086] to-[#0000]"></div>
+    <img class="absolute z-[-3] inset-0 h-full w-full object-cover " src="{{movies.last.image_cover.url}}" alt="">
+    <header class=" bg-gradient-to-b from-[#00000031] to-[#0000] ">
+        <div class="container mx-auto p-5 flex justify-between items-center">
+            <div class="flex justify-between items-center gap-10">
+                <img class="h-10" src="../static/img/white_logo.png" alt="Netflix Logo">
+                <nav class="flex space-x-5">
+                    <span><a href="/">Home</a></span>
+                    <span><a href="/my-list">Movies</a></span>
+                    <span><a href="/my-list">My List</a></span>
+                </nav>
+            </div>
+            
+            
+            <div class="flex space-x-5 items-center">
+                <form action="search" method="POST">
+                    {% csrf_token %}
+                    <input type="search" name="search_term" placeholder="Search"
+                        class="bg-black bg-opacity-50  backdrop-blur-lg py-2.5 pl-4 rounded-md mx-2 outline-none">
+                    <button class="bg-purple-600 text-white py-2 px-3 rounded hover:bg-purple-500"><i
+                            class='bx bx-search'></i></button>
+                </form>
+                <div class="relative max-w-10 h-full flex items-center">
+                    <div class="flex-col items-center justify-center max-w-10 text-sm font-light leading-3">Welcome, <span
+                            class="text-lg font-bold text-purple-600">{{user.username}}</span></div>
+            
+                </div>
+            </div>
+        </div>
+    </header>
+    <section class="container mx-auto relative flex py-20 flex-col space-y-10" style="background-image: url('{{featured_movie.image_cover.url}}'); background-size: cover; background-position: center;">
+        <h2 class="text-6xl font-extrabold max-w-[40rem] drop-shadow">
+            {{movies.last.title}}
+        </h2>
+        <div class="flex justify-start gap-5">
+            <p class="opacity-90">{{movies.last.production_company}}</p>
+            <p class="font-extrabold text-purple-600">{{movies.last.release_date|date:"Y"}}</p>
+        </div>
+        <div class="flex gap-5">
+            <a href="{% url 'watch' content_type=movies.last.type movie_title=movies.last.title %}"><button class="px-14 py-3 rounded-full font-bold bg-purple-600 hover:bg-purple-500">PLAY</button></a>
+            <button class="h-12 aspect-square border-2 rounded-full text-white hover:bg-white hover:text-black transition-color duration-150 ease-in-out"><i class='bx bx-plus font-light  text-2xl'></i></button>
+        </div>
+    </section>
+    <h2 class="text-xl font-bold mb-5 container mx-auto">MY LIST</h2>
+    <section
+        class="fixed bottom-0 right-0 left-0 container mx-auto py-10 overflow-x-scroll" id="container">
+    
+        
+    
+        <div class="flex space-x-5 scrolling-content">
+            {% for movie in movies %}
+            <a href="{% url 'movie_detail' movie_title=movie.title %}">
+                <div class="relative w-40 h-64 rounded-lg flex-shrink-0 film-card">
+                    <div
+                        class="absolute z-[1] text-sm top-2 right-2 px-2 py-1 bg-purple-700 bg-opacity-70 border shadow-lg border-[#ffffff3f] backdrop-blur-md rounded-md">
+                        {{ movie.type }}
+                    </div>
+                    <img class="rounded-lg w-full h-full absolute inset-0 object-cover" src="{{ movie.image_card.url }}"
+                        alt="">
+                </div>
+            </a>
+            {% endfor %}
+        </div>
+    <style>
+        .container::-webkit-scrollbar {
+            
+            display: none;
+        }
+    
+        .container {
+            -ms-overflow-style: none;
+            
+            scrollbar-width: none;
+            
+        }
+    </style>
+    </section>
+    
+    
+    
+
+    <!-- Modal -->
+    <div class="modal" id="movieModal">
+        <div class="modal-content">
+            <div class="flex justify-between">
+                <h2 class="text-xl mb-5">Movie Title</h2>
+                <button onclick="hideModal()">X</button>
+            </div>
+            <img width="1000" height="100" src="https://bloximages.newyork1.vip.townnews.com/newsrecord.org/content/tncms/assets/v3/editorial/8/1e/81ea500c-45ac-11ee-a11e-a7402910a7e7/64ecaae69243a.image.jpg" alt="Movie Image" class=" mb-5">
+            <div class="flex justify-between mb-5">
+                <span>Year: 2023</span>
+                <span>Length: 2h 15min</span>
+            </div>
+            <p class="mb-5">Detailed information about the movie.</p>
+            <div class="flex space-x-4 mb-5">
+                <a href="movie.html">
+                    <button class="bg-red-600 text-white p-2 px-5 rounded hover:bg-red-500">Play</button>
+                </a>
+                <button id="addToListButton" onclick="addItemToList()" class="border border-white text-white p-2 px-5 rounded hover:bg-gray-700">
+                    Add to List
+                </button>
+            </div>
+            
+        </div>
+    </div>
+</body>
+
+</html>
