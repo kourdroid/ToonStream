@@ -1,5 +1,2 @@
-asgiref
-Django==5.0.6
-tzdata
-python-dateutil
-sqlparse
+
+Django==4.2.7
