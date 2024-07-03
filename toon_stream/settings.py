@@ -9,7 +9,7 @@ SECRET_KEY = "django-insecure-yrzufzb%hpcbkdm0m)f)hmgap*tx!i7v&9*s@$-)gli$0g55dw
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['.vercel.app']
+ALLOWED_HOSTS = ['*']
 
 
 # Application definition
@@ -21,6 +21,7 @@ INSTALLED_APPS = [
     "django.contrib.sessions",
     "django.contrib.messages",
     "django.contrib.staticfiles",
+    
     "core",
 ]
 
@@ -34,7 +35,7 @@ MIDDLEWARE = [
     "django.middleware.clickjacking.XFrameOptionsMiddleware",
 ]
 
-ROOT_URLCONF = "toonstream.urls"
+ROOT_URLCONF = "toon_stream.urls"
 
 TEMPLATES = [
     {
@@ -52,7 +53,7 @@ TEMPLATES = [
     },
 ]
 
-WSGI_APPLICATION = "toonstream.wsgi.application"
+WSGI_APPLICATION = "toon_stream.wsgi.application"
 
 
 # Database
