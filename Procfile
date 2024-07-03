@@ -1,1 +1,1 @@
-web: gunicorn toon_stream.wsgi --log-file -
+web: toon_stream.wsgi --log-file -
