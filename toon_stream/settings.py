@@ -96,7 +96,10 @@ AUTH_PASSWORD_VALIDATORS = [
 # https://docs.djangoproject.com/en/5.0/topics/i18n/
 
 LANGUAGE_CODE = "en-us"
-
+CSRF_TRUSTED_ORIGINS = [
+    'https://web-production-5a02.up.railway.app',
+    # Add other trusted origins here
+]
 TIME_ZONE = "UTC"
 
 USE_I18N = True
